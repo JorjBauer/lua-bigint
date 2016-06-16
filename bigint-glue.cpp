@@ -137,6 +137,14 @@ extern "C" int bigint_tostring(lua_State *L)
   return 1;
 }
 
+extern "C" int bigint_raw(lua_State *L)
+{
+  BigInt *b1 = _checkBigInt(L, 1);
+  
+  lua_pushlstring(L, (const char *)b1->byte_array_value(), b1->byte_length());
+  return 1;
+}
+
 extern "C" int bigint_tonumber(lua_State *L)
 {
   BigInt *b1 = _checkBigInt(L, 1);

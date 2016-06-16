@@ -59,6 +59,7 @@ static const struct luaL_Reg methods[] = {
   { "new",          bigint_new                  },
   { "tonumber",     bigint_tonumber             },
   { "tostring",     bigint_tostring             },
+  { "raw",          bigint_raw                  },
   { "expmod",       bigint_expmod               },
   { "inv",          bigint_inv                  },
   { "gcd",          bigint_gcd                  },

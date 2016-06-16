@@ -6,6 +6,7 @@
 int bigint_new(lua_State *L);
 int bigint_destroy(lua_State *L);
 int bigint_tostring(lua_State *L);
+int bigint_raw(lua_State *L);
 int bigint_tonumber(lua_State *L);
 int bigint_concat(lua_State *L);
 int bigint_add(lua_State *L);
