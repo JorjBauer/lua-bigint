@@ -363,6 +363,24 @@ bool BigInt::set_value(const char* value)
 		negative = false;
 		i = 0;
 	}
+
+	// Are we base 10 or base 16?
+	if (value[i] == '0' && value[i+1] == 'x') {
+		// Base 16.
+		i += 2;
+		for ( ; i < strlen(value); i++)
+		{
+			*this <<= 4;
+			unsigned long v = 
+				((value[i] >= '0' && value[i] <= '9') ? (value[i] - '0') :
+				 (value[i] >= 'a' && value[i] <= 'f') ? (value[i] - 'a' + 10) :
+				 (value[i] >= 'A' && value[i] <= 'F') ? (value[i] - 'A' + 10) :
+				 0);
+			add_digit(v);
+		}
+
+		return true;
+	}
 	
 	// Get the magnitude
 	//
