@@ -43,30 +43,30 @@ assert(not (bigint:new(40) < b3))
 assert(not (b3 < bigint:new(40)))
 
 -- shift left/right by 1 uses a different internal algorithm than 2+, so do both
-assert(bigint.shiftleft(b3, 1) == bigint:new(80))
-assert(bigint.shiftright(b3, 1) == bigint:new(20))
-assert(bigint.shiftleft(b3, 2) == bigint:new(160))
-assert(bigint.shiftright(b3, 2) == bigint:new(10))
+assert(b3:shiftleft(1)  == bigint:new(80))
+assert(b3:shiftright(1) == bigint:new(20))
+assert(b3:shiftleft(2)  == bigint:new(160))
+assert(b3:shiftright(2) == bigint:new(10))
 
 -- Test bit-shifts around word boundaries
 local b5 = bigint:new(1)
 
-assert(bigint.shiftleft(b5, 15) == bigint:new(32768))
-assert(bigint.shiftleft(b5, 16) == bigint:new(65536))
-assert(bigint.shiftleft(b5, 17) == bigint:new(131072))
+assert(b5:shiftleft(15) == bigint:new(32768))
+assert(b5:shiftleft(16) == bigint:new(65536))
+assert(b5:shiftleft(17) == bigint:new(131072))
 
-assert(bigint.shiftleft(b5, 31) == bigint:new("2147483648"))
-assert(bigint.shiftleft(b5, 32) == bigint:new("4294967296"))
-assert(bigint.shiftleft(b5, 33) == bigint:new("8589934592"))
+assert(b5:shiftleft(31) == bigint:new("2147483648"))
+assert(b5:shiftleft(32) == bigint:new("4294967296"))
+assert(b5:shiftleft(33) == bigint:new("8589934592"))
 
 -- and now we're talking about very large numbers that require string initialization...
-assert(bigint.shiftleft(b5, 64) == bigint:new("18446744073709551616"))
-assert(bigint.shiftleft(b5, 65) == bigint:new("36893488147419103232"))
-assert(bigint.shiftleft(b5, 100) == bigint:new("1267650600228229401496703205376"))
-assert(bigint.shiftright(bigint.shiftleft(b5, 100), 100) == b5)
+assert(b5:shiftleft(64) == bigint:new("18446744073709551616"))
+assert(b5:shiftleft(65) == bigint:new("36893488147419103232"))
+assert(b5:shiftleft(100) == bigint:new("1267650600228229401496703205376"))
+assert(b5:shiftleft(100):shiftright(100) == b5)
 
 local b6 = bigint:new(2)
-assert(bigint.expmod(b6, 100, 50) == bigint:new(26)) -- (2^100)%50 == 26
+assert(b6:expmod(100, 50) == bigint:new(26)) -- (2^100)%50 == 26
 
 --       { "inv",          bigint_inv                  },
 --       { "gcd",          bigint_gcd                  },

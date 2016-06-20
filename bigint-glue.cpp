@@ -67,6 +67,7 @@ static BigInt *_checkBigInt(lua_State *L, int index)
 extern "C" void construct_bigint(lua_State *L, int argidx)
 {
   BigInt **b = (BigInt **)lua_newuserdata(L, sizeof(BigInt *));
+
   if (argidx < 0) 
     argidx--; // we just pushed a new element on the stack...
   switch (lua_type(L, argidx)) {

@@ -109,6 +109,11 @@ int luaopen_bigint(lua_State *L)
   luaL_setfuncs(L, methods, 0);
 #endif
 
+  lua_pushliteral(L, "__index");
+  lua_pushvalue(L, -2);           // dup methods
+  lua_rawset(L, -4);              // metatable.__index = methods; pops 2
+
+
   return 1;
 
 }
