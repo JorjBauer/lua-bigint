@@ -1,8 +1,30 @@
 #!/usr/bin/env lua
 
+require "std.strict"
+
 local bigint = require "bigint"
+local factor = require "bigint.factor"
 local inspect = require "inspect"
 local os = require "os"
+
+-- return true if the elements in 'a' match the elements in 'b'
+function arrayMatch(a, b)
+   if (#a ~= #b) then
+      return false
+   end
+
+   local i
+   for i=1, #a do
+      if (type(b[i]) == "number" or type(b[i]) == "string") then
+	 b[i] = bigint:new(b[i])
+      end
+      if (a[i] ~= b[i]) then
+	 return false
+      end
+   end
+
+   return true
+end
 
 local b1 = bigint:new("3")
 assert(b1 == bigint:new("3"))
@@ -63,13 +85,24 @@ assert(b5:shiftleft(33) == bigint:new("8589934592"))
 assert(b5:shiftleft(64) == bigint:new("18446744073709551616"))
 assert(b5:shiftleft(65) == bigint:new("36893488147419103232"))
 assert(b5:shiftleft(100) == bigint:new("1267650600228229401496703205376"))
-assert(b5:shiftleft(100):shiftright(100) == b5)
+local b7 = b5
+assert(b5:shiftleft(100):shiftright(101) == b7:shiftright(1))
 
 local b6 = bigint:new(2)
 assert(b6:expmod(100, 50) == bigint:new(26)) -- (2^100)%50 == 26
 
 --       { "inv",          bigint_inv                  },
---       { "gcd",          bigint_gcd                  },
 
+assert(bigint.gcd(10,20):tostring() == "10")
+assert(bigint.gcd(45,330):tostring() == "15")
+assert(bigint.gcd(45,"330"):tostring() == "15")
+assert(bigint.gcd(258258,48135981) == bigint:new(3))
+assert(bigint.gcd(258258,48135981):tostring() == "3")
+
+assert(arrayMatch(factor.compute(2), { 2 } ))
+assert(arrayMatch(factor.compute(4), { 2, 2 } ))
+assert(arrayMatch(factor.compute(bigint:new(2)), { 2 } ))
+assert(arrayMatch(factor.compute("2"), { 2 } ))
+assert(arrayMatch(factor.compute("99999999999999999999"), { 3, 3, 11, 41, 101, 271, 3541, 9091, 27961 } ))
 
 print("All tests passed")
