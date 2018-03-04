@@ -72,7 +72,7 @@ extern "C" void construct_bigint(lua_State *L, int argidx)
     argidx--; // we just pushed a new element on the stack...
   switch (lua_type(L, argidx)) {
   case LUA_TNUMBER:
-    *b = new BigInt(lua_tointeger(L, argidx));
+    *b = new BigInt((long)lua_tointeger(L, argidx));
     break;
   case LUA_TSTRING:
     *b = new BigInt(lua_tostring(L, argidx));
