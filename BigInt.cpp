@@ -68,12 +68,6 @@ BigInt::BigInt(long value)
 	set_value(value);
 }
 
-BigInt::BigInt(unsigned long value)
-{
-	this->value = NULL;
-	set_value(value);
-}
-
 BigInt::BigInt(const char* value)
 {
 	this->value = NULL;
@@ -94,22 +88,11 @@ BigInt::BigInt(long count, DIGIT value)
 	negative = false;
 }
 
-#if !TWODIGITS_IS_UL
-BigInt::BigInt(TWODIGITS digits)
+BigInt::BigInt(TWODIGITS_CONSTYPE digits)
 {
-	this->value = new DIGIT[2];
-	msd = 0;
-	lsd = 1;
-	this->value[1] = (DIGIT) (digits) & DIGITMASK;
-#if DIGITBITS == 32
-	digits = 0;
-#else
-	digits >>= DIGITBITS;
-#endif
-	this->value[0] = (DIGIT) digits;
-	negative = false;
+	this->value = NULL;
+	set_value((TWODIGITS_CONSTYPE)digits);
 }
-#endif
 
 
 BigInt::~BigInt()
@@ -310,7 +293,7 @@ bool BigInt::set_value(unsigned long value)
 
 	// TODO: We're assuming that DIGITBYTES divides 4 evenly
 
-	lsd = 4 / DIGITBYTES - 1;
+	this->lsd = 4 / DIGITBYTES - 1;
 	this->msd = this->lsd;
 
 	// Allocate and populate the digits
@@ -318,7 +301,7 @@ bool BigInt::set_value(unsigned long value)
 	this->value = new DIGIT[lsd+1];
 	if (!this->value)  return false;
 	memset(this->value, 0, (lsd+1)*DIGITBYTES);
-	for (long i=lsd; value; i--)
+	for (long i=this->lsd; value; i--)
 	{
 		this->value[i] = (DIGIT)(value & DIGITMASK);
 #if (DIGITBITS == 32)
@@ -954,17 +937,9 @@ bool BigInt::squaremod(const BigInt& modulator)
 		a %= modulator;
 		b.copy_value(&value[msd], i);
 		b <<= DIGITBITS;
-#if TWODIGITS_IS_UL
-		b *= (unsigned long)(value[i+msd] * 2);
-#else
-		b *= (TWODIGITS)(value[i+msd] * 2);
-#endif
+		b *= (TWODIGITS_CONSTYPE)(value[i+msd] * 2);
+		a += b + (TWODIGITS_CONSTYPE)(value[i+msd]*value[i+msd]);
 
-#if TWODIGITS_IS_UL
-		a += b + (unsigned long)(value[i+msd]*value[i+msd]);
-#else
-		a += b + (TWODIGITS)(value[i+msd]*value[i+msd]);
-#endif
 		a %= modulator;
 	}
 	return copy_value(a.value, a.lsd+1);
@@ -1720,8 +1695,9 @@ int BigInt::value_compare(const BigInt& bi) const
 {
 	// If shorter, must be less
 	//
-	if (lsd-msd < bi.lsd-bi.msd)
+	if (lsd-msd < bi.lsd-bi.msd) {
 		return -1;
+	}
 	
 	// If longer, must be greater
 	//
@@ -2054,7 +2030,6 @@ char* BigInt::decimal_string_value() const
 		//
 		result[0] = '-';
 	}
-	
 	return result;
 }
 

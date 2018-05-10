@@ -2,7 +2,9 @@
 #define __BIGINT_H
 #include <inttypes.h>
 
+#ifndef BIGINT_PRIMITIVE_SIZE
 #define BIGINT_PRIMITIVE_SIZE 32
+#endif
 
 #if BIGINT_PRIMITIVE_SIZE == 64
 
@@ -12,6 +14,7 @@
 #define DIGIT uint32_t
 #define SIGNEDDIGIT int32_t
 #define TWODIGITS_IS_UL 0
+#define TWODIGITS_CONSTYPE uint64_t
 #define DIGITBYTES 4
 #define DIGITBITS 32
 #define DIGITMASK 0xFFFFFFFF
@@ -24,6 +27,7 @@
 #define SIGNEDDIGIT int16_t
 #define TWODIGITS uint32_t
 #define TWODIGITS_IS_UL 1
+#define TWODIGITS_CONSTYPE unsigned long
 #define SIGNEDTWODIGITS int32_t
 #define DIGITBYTES 2
 #define DIGITBITS 16
@@ -36,6 +40,7 @@
 #define SIGNEDDIGIT int8_t
 #define TWODIGITS uint16_t
 #define TWODIGITS_IS_UL 0
+#define TWODIGITS_CONSTYPE unsigned long
 #define SIGNEDTWODIGITS int16_t
 #define DIGITBYTES 1
 #define DIGITBITS 8
@@ -56,13 +61,10 @@ public:		// constructors & destructors
 	BigInt(unsigned char*, long);	// defaults to positive
 	BigInt(unsigned char*, long, bool);
 	BigInt(long);
-	BigInt(unsigned long);
+	BigInt(TWODIGITS_CONSTYPE);
 	BigInt(const char*);
 	BigInt(const unsigned char*);
 	BigInt(long, DIGIT);
-#if !TWODIGITS_IS_UL
-	BigInt(TWODIGITS);
-#endif
 	~BigInt();
 
 public:		// methods
