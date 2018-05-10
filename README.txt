@@ -53,9 +53,9 @@ Some suggestions on how you might get your platform to compile this:
    luarocks-build-cpp subsystem.
 
   $ luarocks install luarocks-build-cpp
-  $ luarocks install https://jorj.org/bigint-cpp/bigint-1.0.3-1-cpp.rockspec
+  $ luarocks install https://jorj.org/bigint-cpp/bigint-1.0.3-1.rockspec
 
-  (This works for me on Debian 8.)
+  (This works for me on Debian 8. It does not work with Lua 5.3 though.)
 
 2. luarocks configuration override. In theory, ~/.luarocks/config.lua
    should set overrides on various luarocks configuration variables. In
@@ -67,7 +67,7 @@ Some suggestions on how you might get your platform to compile this:
 
        variables = { LD = "gcc -lstdc++" }
 
-   (This also works for me on Debian 8 and 9.)
+   (This also works for me on Debian 8 and 9, regardless of Lua version.)
 
    At some point in the future I hope the cpp subsystem will be native to
    luarocks (and work well on all platforms). Until then, it's a bit of a 
