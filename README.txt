@@ -37,3 +37,38 @@ Casual testing shows the Lua-wrapped implementation to be about the
 same speed as the original C++ code. In practical situations, it's
 only half that speed because of dynamic type conversion and having to
 create new BigInt arguments on the fly.
+
+Since the core library is in C++, this may be tricky to install on
+your system; C++ compilation/linking is not LuaRocks' forte. As-is,
+I've tested this on:
+
+  - MacOS 10.11 through 10.13 (Homebrew; Lua 5.3.4, luarocks 2.4.4)
+  - RHEL 7.5 (Lua 5.1.4, luarocks 2.3.0; gcc-c++ package installed)
+
+Other platforms (and versions of Lua) may differ.
+
+Some suggestions on how you might get your platform to compile this:
+
+1. If you're using Lua 5.1, you can probably use the
+   luarocks-build-cpp subsystem.
+
+  $ luarocks install luarocks-build-cpp
+  $ luarocks install https://jorj.org/bigint-cpp/bigint-1.0.2-1-cpp.rockspec
+
+  (This works for me on Debian 8.)
+
+2. luarocks configuration override. In theory, ~/.luarocks/config.lua
+   should set overrides on various luarocks configuration variables. In
+   practice, the naming and location of the file differ depending on the
+   version of luarocks (e.g. config.lua or config-5.3.lua) and whether or
+   not you're using 'sudo' to install (i.e. /root/.luarocks or
+   ~/.luarocks). Put this in your config.lua, and then the normal 
+   'luarocks install bigint' should link correctly with libstdc++.
+
+       variables = { LD = "gcc -lstdc++" }
+
+   (This also works for me on Debian 8.)
+
+   At some point in the future I hope the cpp subsystem will be native to
+   luarocks (and work well on all platforms). Until then, it's a bit of a 
+   crapshoot.
