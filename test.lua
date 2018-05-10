@@ -31,8 +31,10 @@ assert(b1 == bigint:new("3"))
 assert(b1 == bigint:new(3))
 assert(b1 ~= bigint:new("4"))
 assert(b1 ~= bigint:new(4))
+assert(b1:tonumber() == 3)
 
 local b2 = bigint:new("33")
+assert(b2:tonumber() == 33)
 
 local b3 = b1 + b2
 assert(b3 == bigint:new(36))
@@ -58,9 +60,9 @@ assert(b3 == b4)
 assert(not (b3==40)) -- fails b/c you can't compare a userdata with a number :(
 
 assert(b3 == bigint:new(40))
-assert(b3 <= 40)
-assert(not (40 < b3))
-assert(not (b3 < 40))
+assert(b3:tonumber() <= 40)
+assert(not (40 < b3:tonumber()))
+assert(not (b3:tonumber() < 40))
 assert(not (bigint:new(40) < b3))
 assert(not (b3 < bigint:new(40)))
 
