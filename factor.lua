@@ -21,7 +21,7 @@ function factor.compute(n)
       prevfact = prevfact + 1
 
       table.insert(results, d)
-      
+
       if (k > bigint:new(1)) then
 	 -- exponentiation: we'll return that as repeating factors
 	 local i=bigint:new(1)
@@ -58,7 +58,7 @@ function factor.compute(n)
 
       d = bigint:new(3)
       while (d * d <= n) do
-	 k=0
+	 k=bigint:new(0)
 	 while (n % d == bigint:new(0)) do 
 	    n = n / d
 	    k = k + 1
@@ -75,7 +75,7 @@ function factor.compute(n)
 	 -- It's prime.
 	 return { n }
       else
-	 show(n,1)
+	 show(n,bigint:new(1))
       end
    end
 
